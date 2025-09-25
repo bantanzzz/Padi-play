@@ -5,6 +5,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
 import { getFirestore, collection, addDoc, serverTimestamp, getDocs, query, orderBy, doc, setDoc, getDoc, updateDoc, onSnapshot, Timestamp, increment } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
+// Vercel Analytics
+import { inject } from 'https://esm.sh/@vercel/analytics';
+
 // --- Firebase Setup (placeholder: replace with your config) ---
 const firebaseConfig = {
   apiKey: "AIzaSyAzWLtsBXYCKfyvloc5BHDgv6nJsM7on7A",
@@ -446,5 +449,8 @@ if (saveProfileBtn) {
 }
 
 loadProfile();
+
+// Inject Vercel Analytics
+inject();
 
 
