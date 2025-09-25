@@ -1,0 +1,26 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow all operations for rooms (adjust permissions as needed for production)
+    match /rooms/{roomId} {
+      allow read, write: if true;
+
+      // Enforce one entry per playerId per round
+      match /entries/{entryId} {
+        allow read: if true;
+        allow create: if entryId == request.resource.data.playerId + '_' + request.resource.data.roundId
+          && !exists(/databases/$(database)/documents/rooms/$(roomId)/entries/$(entryId));
+        allow update, delete: if false;
+      }
+
+      match /players/{playerId} {
+        allow read, write: if true;
+      }
+    }
+
+    // Users collection (assuming authenticated users)
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}

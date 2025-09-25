@@ -6,117 +6,133 @@
     <title>PADI PLAY</title>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="min-h-screen bg-gray-50 text-gray-900">
+  <body class="min-h-screen bg-gradient-to-br from-purple-100 to-pink-100 text-gray-900">
     <main class="max-w-2xl mx-auto p-6">
       <div class="flex items-center justify-center gap-3 mb-6">
-        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-600 to-emerald-500 text-white flex items-center justify-center font-bold tracking-wide">PP</div>
-        <h1 class="text-2xl font-semibold text-center">PADI PLAY</h1>
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-yellow-500 text-white flex items-center justify-center font-bold tracking-wide shadow-lg">PP</div>
+        <h1 class="text-2xl font-semibold text-center text-purple-800">PADI PLAY</h1>
       </div>
 
-      <section class="bg-white shadow-sm border border-gray-200 rounded-lg p-5 mb-6">
-        <h2 class="text-lg font-medium mb-3">Your Profile</h2>
+      <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5 mb-6 backdrop-blur-sm">
+        <h2 class="text-lg font-medium mb-3 text-purple-800">Your Profile</h2>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
           <div class="sm:col-span-2">
-            <label for="profileName" class="block text-sm font-medium text-gray-700">Display name</label>
-            <input id="profileName" type="text" class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200" placeholder="e.g., Alex" />
+            <label for="profileName" class="block text-sm font-medium text-purple-700">Display name</label>
+            <input id="profileName" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Alex" />
           </div>
           <div>
-            <label for="profileEmoji" class="block text-sm font-medium text-gray-700">Emoji</label>
-            <input id="profileEmoji" type="text" maxlength="2" class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-center text-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200" placeholder="😀" />
+            <label for="profileEmoji" class="block text-sm font-medium text-purple-700">Emoji</label>
+            <input id="profileEmoji" type="text" maxlength="2" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 text-center text-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="😀" />
           </div>
         </div>
         <div class="mt-3 flex items-center gap-2">
-          <button id="saveProfileBtn" class="rounded-md bg-sky-600 px-3 py-2 text-white hover:bg-sky-700">Save Profile</button>
-          <span id="profileStatus" class="text-sm text-gray-500"></span>
+          <button id="saveProfileBtn" class="rounded-md bg-blue-600 px-3 py-2 text-white hover:bg-blue-700 shadow-sm">Save Profile</button>
+          <span id="profileStatus" class="text-sm text-purple-600"></span>
         </div>
       </section>
 
-      <section class="bg-white shadow-sm border border-gray-200 rounded-lg p-5 mb-6">
-        <h2 class="text-lg font-medium mb-3">Multiplayer Room</h2>
+      <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5 mb-6 backdrop-blur-sm">
+        <h2 class="text-lg font-medium mb-3 text-purple-800">Multiplayer Room</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
           <div>
-            <label for="playerName" class="block text-sm font-medium text-gray-700">Your name</label>
-            <input id="playerName" type="text" class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200" placeholder="e.g., Alex">
+            <label for="playerName" class="block text-sm font-medium text-purple-700">Your name</label>
+            <input id="playerName" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Alex">
           </div>
           <div>
-            <label for="roomCode" class="block text-sm font-medium text-gray-700">Room code</label>
-            <input id="roomCode" type="text" class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 uppercase tracking-wider focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200" placeholder="e.g., AB12">
+            <label for="roomCode" class="block text-sm font-medium text-purple-700">Room code</label>
+            <input id="roomCode" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 uppercase tracking-wider focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., AB12">
           </div>
         </div>
-        <div class="flex flex-wrap items-center gap-2">
-          <button id="createRoomBtn" class="rounded-md bg-slate-700 px-3 py-2 text-white hover:bg-slate-800">Create Room</button>
-          <button id="joinRoomBtn" class="rounded-md bg-slate-500 px-3 py-2 text-white hover:bg-slate-600">Join Room</button>
-          <div class="flex items-center gap-2 ml-auto">
-            <label for="roundDuration" class="text-sm text-gray-700">Duration</label>
-            <select id="roundDuration" class="rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div class="flex flex-wrap gap-2">
+            <button id="createRoomBtn" class="rounded-md bg-purple-600 px-3 py-2 text-white hover:bg-purple-700 shadow-sm">Create Room</button>
+            <button id="joinRoomBtn" class="rounded-md bg-pink-600 px-3 py-2 text-white hover:bg-pink-700 shadow-sm">Join Room</button>
+          </div>
+          <div class="flex items-center gap-2">
+            <label for="roundDuration" class="text-sm text-purple-700">Duration</label>
+            <select id="roundDuration" class="rounded-md border border-purple-300 px-2 py-1 text-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
               <option value="30">30s</option>
               <option value="45">45s</option>
               <option value="60" selected>60s</option>
             </select>
           </div>
-          <span id="roomStatus" class="text-sm text-gray-600">Not in a room</span>
+          <span id="roomStatus" class="text-sm text-purple-600">Not in a room</span>
         </div>
       </section>
 
-      <section class="bg-white shadow-sm border border-gray-200 rounded-lg p-5 mb-6">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-sm text-gray-500">Selected letter</p>
-            <p id="letterDisplay" class="text-4xl font-bold tracking-widest">-</p>
+      <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5 mb-6 backdrop-blur-sm">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div class="text-center sm:text-left">
+            <p class="text-sm text-purple-600">Selected letter</p>
+            <p id="letterDisplay" class="text-4xl font-bold tracking-widest text-orange-600">-</p>
           </div>
-          <div class="flex items-center gap-3">
-            <div class="text-right">
-              <p class="text-sm text-gray-500">Time left</p>
-              <p id="timerDisplay" class="text-2xl font-semibold">--:--</p>
+          <div class="flex flex-col items-center gap-3 sm:flex-row sm:items-center">
+            <div class="text-center sm:text-right">
+              <p class="text-sm text-purple-600">Time left</p>
+              <p id="timerDisplay" class="text-2xl font-semibold text-purple-800">--:--</p>
             </div>
-            <button id="autoLetterBtn" class="inline-flex items-center gap-2 rounded-md bg-purple-600 px-4 py-2 text-white hover:bg-purple-700 active:scale-[0.99]">
-              Auto Generate Letter
-            </button>
-            <button id="startRoundBtn" class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 active:scale-[0.99]">
-              Start Round
-            </button>
+            <div class="flex flex-col gap-2 sm:flex-row">
+              <button id="autoLetterBtn" class="inline-flex items-center justify-center gap-2 rounded-md bg-yellow-500 px-3 py-2 text-sm text-white hover:bg-yellow-600 active:scale-[0.99] shadow-sm sm:px-4">
+                Auto Generate Letter
+              </button>
+              <button id="startRoundBtn" class="inline-flex items-center justify-center gap-2 rounded-md bg-green-600 px-3 py-2 text-sm text-white hover:bg-green-700 active:scale-[0.99] shadow-sm sm:px-4">
+                Start Round
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
-      <section class="bg-white shadow-sm border border-gray-200 rounded-lg p-5 mb-6">
+      <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5 mb-6 backdrop-blur-sm">
         <form id="gameForm" class="grid grid-cols-1 gap-4">
           <div>
-            <label for="nameInput" class="block text-sm font-medium text-gray-700">Name</label>
-            <input id="nameInput" type="text" class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200" placeholder="e.g., Alice" required>
+            <label for="nameInput" class="block text-sm font-medium text-purple-700">Name</label>
+            <input id="nameInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Alice" required>
           </div>
           <div>
-            <label for="placeInput" class="block text-sm font-medium text-gray-700">Place</label>
-            <input id="placeInput" type="text" class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200" placeholder="e.g., Alaska" required>
+            <label for="placeInput" class="block text-sm font-medium text-purple-700">Place</label>
+            <input id="placeInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Alaska" required>
           </div>
           <div>
-            <label for="animalInput" class="block text-sm font-medium text-gray-700">Animal</label>
-            <input id="animalInput" type="text" class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200" placeholder="e.g., Antelope" required>
+            <label for="animalInput" class="block text-sm font-medium text-purple-700">Animal</label>
+            <input id="animalInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Antelope" required>
           </div>
           <div>
-            <label for="thingInput" class="block text-sm font-medium text-gray-700">Thing</label>
-            <input id="thingInput" type="text" class="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200" placeholder="e.g., Anchor" required>
+            <label for="thingInput" class="block text-sm font-medium text-purple-700">Thing</label>
+            <input id="thingInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Anchor" required>
           </div>
-          <button id="submitBtn" type="submit" class="mt-2 rounded-md bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700 active:scale-[0.99]">Submit</button>
+          <button id="submitBtn" type="submit" class="mt-2 rounded-md bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700 active:scale-[0.99] shadow-sm">Submit</button>
           <p id="formError" class="text-sm text-red-600 hidden">Please generate a letter and fill all fields.</p>
         </form>
       </section>
 
-      <section class="bg-white shadow-sm border border-gray-200 rounded-lg p-5">
+      <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5">
         <div class="flex items-center justify-between mb-3">
-          <h2 class="text-lg font-medium">Room Entries</h2>
-          <span id="entriesHint" class="text-xs text-gray-500">Join a room to see live entries</span>
+          <h2 class="text-lg font-medium text-purple-800">Room Entries</h2>
+          <span id="entriesHint" class="text-xs text-purple-600">Join a room to see live entries</span>
         </div>
-        <ul id="entriesList" class="divide-y divide-gray-200"></ul>
+        <ul id="entriesList" class="divide-y divide-purple-200"></ul>
       </section>
 
-      <section class="bg-white shadow-sm border border-gray-200 rounded-lg p-5 mt-6">
+      <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5 mt-6 backdrop-blur-sm">
         <div class="flex items-center justify-between mb-3">
-          <h2 class="text-lg font-medium">Leaderboard</h2>
-          <span class="text-xs text-gray-500">Scores update live</span>
+          <h2 class="text-lg font-medium text-purple-800">Leaderboard</h2>
+          <span class="text-xs text-purple-600">Scores update live</span>
         </div>
-        <ul id="leaderboardList" class="divide-y divide-gray-200"></ul>
+        <ul id="leaderboardList" class="divide-y divide-purple-200"></ul>
       </section>
+
+      <footer class="bg-gradient-to-r from-purple-50 to-pink-50 border-t border-purple-200 mt-8 p-5 rounded-lg shadow-md">
+        <h2 class="text-lg font-medium mb-3 text-purple-800">Game Rules</h2>
+        <ol class="list-decimal list-inside space-y-1 text-sm text-purple-700">
+          <li>A random letter is selected for each round.</li>
+          <li>Players must enter a Name, Place, Animal, and Thing that start with the selected letter.</li>
+          <li>You have a limited time (30-60 seconds) to submit your answers.</li>
+          <li>Points are awarded based on how quickly you submit (faster = more points).</li>
+          <li>Only one submission per player per round is allowed.</li>
+          <li>Join a room to play with others and see live updates.</li>
+        </ol>
+      </footer>
     </main>
 
     <script type="module" src="./script.js"></script>

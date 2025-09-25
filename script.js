@@ -3,7 +3,7 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
-import { getFirestore, collection, addDoc, serverTimestamp, getDocs, query, orderBy, doc, setDoc, getDoc, updateDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, serverTimestamp, getDocs, query, orderBy, doc, setDoc, getDoc, updateDoc, onSnapshot, Timestamp, increment } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 // --- Firebase Setup (placeholder: replace with your config) ---
 const firebaseConfig = {
@@ -85,13 +85,13 @@ function renderEntries(items) {
     li.className = "py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1";
     li.innerHTML = `
       <div>
-        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-semibold mr-2">${data.letter || "-"}</span>
+        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-orange-100 text-orange-700 text-xs font-semibold mr-2">${data.letter || "-"}</span>
         <span class="font-medium">Name:</span> ${data.name}
         <span class="ml-3 font-medium">Place:</span> ${data.place}
         <span class="ml-3 font-medium">Animal:</span> ${data.animal}
         <span class="ml-3 font-medium">Thing:</span> ${data.thing}
       </div>
-      <div class="text-xs text-gray-500">${when}</div>
+      <div class="text-xs text-purple-500">${when}</div>
     `;
     entriesList.appendChild(li);
   });
@@ -244,6 +244,8 @@ async function startRound() {
     currentLetter: getRandomLetter(),
     active: true,
     roundEndsAt: Timestamp.fromMillis(endMillis),
+    roundStartsAt: Timestamp.fromMillis(Date.now()),
+    roundDurationSeconds: durationSeconds,
   });
 }
 
@@ -309,14 +311,32 @@ form.addEventListener("submit", async (e) => {
   };
 
   try {
-    await addDoc(collection(db, "rooms", currentRoomId, "entries"), payload);
-    // Simple scoring: +1 per valid submission
-    await updateDoc(doc(db, "rooms", currentRoomId, "players", clientId), {
-      score: (await getDoc(doc(db, "rooms", currentRoomId, "players", clientId))).data()?.score + 1 || 1,
-    }).catch(async () => {
-      // Fallback if doc missing
-      await setDoc(doc(db, "rooms", currentRoomId, "players", clientId), { score: 1 }, { merge: true });
-    });
+    // Compute time-based points from room round timing
+    const roomSnap = await getDoc(doc(db, "rooms", currentRoomId));
+    const roomData = roomSnap.data() || {};
+    const endMs = roomData.roundEndsAt instanceof Timestamp ? roomData.roundEndsAt.toMillis() : Date.now();
+    const duration = Number(roomData.roundDurationSeconds || 60);
+    const remainingSec = Math.max(0, Math.ceil((endMs - Date.now()) / 1000));
+    const points = Math.max(1, Math.min(duration, remainingSec));
+    payload.points = points;
+
+    // Add roundId for uniqueness
+    const roundId = roomData.roundStartsAt ? roomData.roundStartsAt.toMillis().toString() : null;
+    if (!roundId) {
+      formError.textContent = "Round not properly started.";
+      formError.classList.remove("hidden");
+      return;
+    }
+    payload.roundId = roundId;
+
+    // Use setDoc with unique ID to prevent duplicates
+    const entryId = `${payload.playerId}_${payload.roundId}`;
+    await setDoc(doc(db, "rooms", currentRoomId, "entries", entryId), payload);
+    // Atomic score increment by points
+    await updateDoc(doc(db, "rooms", currentRoomId, "players", clientId), { score: increment(points) })
+      .catch(async () => {
+        await setDoc(doc(db, "rooms", currentRoomId, "players", clientId), { score: points }, { merge: true });
+      });
     alert("Submitted successfully!");
     clearForm();
   } catch (err) {
@@ -332,15 +352,16 @@ setTimerText("--:--");
 // --- Leaderboard ---
 function renderLeaderboard(entryDocs) {
   if (!leaderboardList) return;
-  // Compute scores client-side if players subcollection not used for display
+  // Compute scores from entries' points as a fallback display
   const scores = new Map();
   entryDocs.forEach((d) => {
     const data = d.data();
     const pid = data.playerId || "?";
     const name = data.name || "Player";
+    const earned = Number(data.points || 0) || 0;
     const current = scores.get(pid) || { name, score: 0 };
     current.name = name;
-    current.score += 1;
+    current.score += earned;
     scores.set(pid, current);
   });
   const arr = Array.from(scores.values()).sort((a, b) => b.score - a.score);
@@ -355,7 +376,7 @@ function renderLeaderboard(entryDocs) {
   arr.forEach(({ name, score }) => {
     const li = document.createElement("li");
     li.className = "py-3 flex items-center justify-between";
-    li.innerHTML = `<span class="font-medium">${name}</span><span class="text-indigo-700 font-semibold">${score}</span>`;
+    li.innerHTML = `<span class="font-medium">${name}</span><span class="text-purple-700 font-semibold">${score}</span>`;
     leaderboardList.appendChild(li);
   });
 }
