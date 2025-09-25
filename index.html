@@ -87,6 +87,40 @@
       </section>
 
       <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5 mb-6 backdrop-blur-sm">
+        <h2 class="text-lg font-medium mb-3 text-purple-800">Single Player</h2>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-3">
+          <div class="flex flex-wrap gap-2">
+            <button id="startSingleRoundBtn" class="rounded-md bg-green-600 px-3 py-2 text-white hover:bg-green-700 shadow-sm">Start Round</button>
+            <button id="stopSingleRoundBtn" class="rounded-md bg-red-600 px-3 py-2 text-white hover:bg-red-700 shadow-sm">Stop Round</button>
+          </div>
+        </div>
+        <form id="singleGameForm" class="grid grid-cols-1 gap-4">
+          <div>
+            <label for="singleNameInput" class="block text-sm font-medium text-purple-700">Name</label>
+            <input id="singleNameInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Alice" required>
+          </div>
+          <div>
+            <label for="singlePlaceInput" class="block text-sm font-medium text-purple-700">Place</label>
+            <input id="singlePlaceInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Alaska" required>
+          </div>
+          <div>
+            <label for="singleAnimalInput" class="block text-sm font-medium text-purple-700">Animal</label>
+            <input id="singleAnimalInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Antelope" required>
+          </div>
+          <div>
+            <label for="singleThingInput" class="block text-sm font-medium text-purple-700">Thing</label>
+            <input id="singleThingInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Anchor" required>
+          </div>
+          <div>
+            <label for="singleArtisteInput" class="block text-sm font-medium text-purple-700">Artiste</label>
+            <input id="singleArtisteInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Adele" required>
+          </div>
+          <button id="singleSubmitBtn" type="submit" class="mt-2 rounded-md bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700 active:scale-[0.99] shadow-sm">Submit</button>
+          <p id="singleFormError" class="text-sm text-red-600 hidden">Please generate a letter and fill all fields.</p>
+        </form>
+      </section>
+
+      <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5 mb-6 backdrop-blur-sm">
         <form id="gameForm" class="grid grid-cols-1 gap-4">
           <div>
             <label for="nameInput" class="block text-sm font-medium text-purple-700">Name</label>
@@ -104,6 +138,10 @@
             <label for="thingInput" class="block text-sm font-medium text-purple-700">Thing</label>
             <input id="thingInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Anchor" required>
           </div>
+          <div>
+            <label for="artisteInput" class="block text-sm font-medium text-purple-700">Artiste</label>
+            <input id="artisteInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Adele" required>
+          </div>
           <button id="submitBtn" type="submit" class="mt-2 rounded-md bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700 active:scale-[0.99] shadow-sm">Submit</button>
           <p id="formError" class="text-sm text-red-600 hidden">Please generate a letter and fill all fields.</p>
         </form>
@@ -119,17 +157,33 @@
 
       <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5 mt-6 backdrop-blur-sm">
         <div class="flex items-center justify-between mb-3">
+          <h2 class="text-lg font-medium text-purple-800">Players in Room</h2>
+          <span id="playersHint" class="text-xs text-purple-600">Join a room to see players</span>
+        </div>
+        <ul id="playersList" class="divide-y divide-purple-200"></ul>
+      </section>
+
+      <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5 mt-6 backdrop-blur-sm">
+        <div class="flex items-center justify-between mb-3">
           <h2 class="text-lg font-medium text-purple-800">Leaderboard</h2>
           <span class="text-xs text-purple-600">Scores update live</span>
         </div>
         <ul id="leaderboardList" class="divide-y divide-purple-200"></ul>
       </section>
 
+      <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5 mt-6 backdrop-blur-sm">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-lg font-medium text-purple-800">Single Player Entries</h2>
+          <span class="text-xs text-purple-600">Local entries</span>
+        </div>
+        <ul id="singleEntriesList" class="divide-y divide-purple-200"></ul>
+      </section>
+
       <footer class="bg-gradient-to-r from-purple-50 to-pink-50 border-t border-purple-200 mt-8 p-5 rounded-lg shadow-md">
         <h2 class="text-lg font-medium mb-3 text-purple-800">Game Rules</h2>
         <ol class="list-decimal list-inside space-y-1 text-sm text-purple-700">
           <li>A random letter is selected for each round.</li>
-          <li>Players must enter a Name, Place, Animal, and Thing that start with the selected letter.</li>
+          <li>Players must enter a Name, Place, Animal, Thing, and Artiste that start with the selected letter.</li>
           <li>You have a limited time (30-60 seconds) to submit your answers.</li>
           <li>Points are awarded based on how quickly you submit (faster = more points).</li>
           <li>Only one submission per player per round is allowed.</li>

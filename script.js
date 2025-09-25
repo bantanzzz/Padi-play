@@ -39,9 +39,12 @@ const nameInput = document.getElementById("nameInput");
 const placeInput = document.getElementById("placeInput");
 const animalInput = document.getElementById("animalInput");
 const thingInput = document.getElementById("thingInput");
+const artisteInput = document.getElementById("artisteInput");
 const formError = document.getElementById("formError");
 const entriesList = document.getElementById("entriesList");
 const leaderboardList = document.getElementById("leaderboardList");
+const playersList = document.getElementById("playersList");
+const playersHint = document.getElementById("playersHint");
 const roundDurationSelect = document.getElementById("roundDuration");
 const profileNameInput = document.getElementById("profileName");
 const profileEmojiInput = document.getElementById("profileEmoji");
@@ -49,6 +52,17 @@ const saveProfileBtn = document.getElementById("saveProfileBtn");
 const profileStatus = document.getElementById("profileStatus");
 const autoLetterBtn = document.getElementById("autoLetterBtn");
 const stopRoundBtn = document.getElementById("stopRoundBtn");
+const startSingleRoundBtn = document.getElementById("startSingleRoundBtn");
+const stopSingleRoundBtn = document.getElementById("stopSingleRoundBtn");
+const singleGameForm = document.getElementById("singleGameForm");
+const singleNameInput = document.getElementById("singleNameInput");
+const singlePlaceInput = document.getElementById("singlePlaceInput");
+const singleAnimalInput = document.getElementById("singleAnimalInput");
+const singleThingInput = document.getElementById("singleThingInput");
+const singleArtisteInput = document.getElementById("singleArtisteInput");
+const singleSubmitBtn = document.getElementById("singleSubmitBtn");
+const singleFormError = document.getElementById("singleFormError");
+const singleEntriesList = document.getElementById("singleEntriesList");
 
 // --- Helpers ---
 function getRandomLetter() {
@@ -62,11 +76,55 @@ function clearForm() {
   placeInput.value = "";
   animalInput.value = "";
   thingInput.value = "";
+  artisteInput.value = "";
+}
+
+function clearSingleForm() {
+  singleNameInput.value = "";
+  singlePlaceInput.value = "";
+  singleAnimalInput.value = "";
+  singleThingInput.value = "";
+  singleArtisteInput.value = "";
+}
+
+function validateSingleForm() {
+  const hasLetter = singleRoundLetter && singleRoundLetter !== "-";
+  const allFilled = singleNameInput.value.trim() && singlePlaceInput.value.trim() && singleAnimalInput.value.trim() && singleThingInput.value.trim() && singleArtisteInput.value.trim();
+  return Boolean(hasLetter && allFilled);
+}
+
+function renderSingleEntries() {
+  const entries = JSON.parse(localStorage.getItem("singlePlayerEntries") || "[]");
+  singleEntriesList.innerHTML = "";
+  if (!entries.length) {
+    const li = document.createElement("li");
+    li.className = "py-4 text-sm text-gray-500";
+    li.textContent = "No entries yet.";
+    singleEntriesList.appendChild(li);
+    return;
+  }
+
+  entries.forEach((entry) => {
+    const li = document.createElement("li");
+    li.className = "py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1";
+    li.innerHTML = `
+      <div>
+        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-orange-100 text-orange-700 text-xs font-semibold mr-2">${entry.letter || "-"}</span>
+        <span class="font-medium">Name:</span> ${entry.name}
+        <span class="ml-3 font-medium">Place:</span> ${entry.place}
+        <span class="ml-3 font-medium">Animal:</span> ${entry.animal}
+        <span class="ml-3 font-medium">Thing:</span> ${entry.thing}
+        <span class="ml-3 font-medium">Artiste:</span> ${entry.artiste}
+      </div>
+      <div class="text-xs text-purple-500">${entry.timestamp}</div>
+    `;
+    singleEntriesList.appendChild(li);
+  });
 }
 
 function validateForm() {
   const hasLetter = letterDisplay.textContent && letterDisplay.textContent !== "-";
-  const allFilled = nameInput.value.trim() && placeInput.value.trim() && animalInput.value.trim() && thingInput.value.trim();
+  const allFilled = nameInput.value.trim() && placeInput.value.trim() && animalInput.value.trim() && thingInput.value.trim() && artisteInput.value.trim();
   return Boolean(hasLetter && allFilled);
 }
 
@@ -94,10 +152,29 @@ function renderEntries(items) {
         <span class="ml-3 font-medium">Place:</span> ${data.place}
         <span class="ml-3 font-medium">Animal:</span> ${data.animal}
         <span class="ml-3 font-medium">Thing:</span> ${data.thing}
+        <span class="ml-3 font-medium">Artiste:</span> ${data.artiste}
       </div>
       <div class="text-xs text-purple-500">${when}</div>
     `;
     entriesList.appendChild(li);
+  });
+}
+
+function renderPlayers(players) {
+  playersList.innerHTML = "";
+  if (!players.length) {
+    const li = document.createElement("li");
+    li.className = "py-4 text-sm text-gray-500";
+    li.textContent = "No players yet.";
+    playersList.appendChild(li);
+    return;
+  }
+
+  players.forEach((player) => {
+    const li = document.createElement("li");
+    li.className = "py-3 flex items-center justify-between";
+    li.innerHTML = `<span class="font-medium">${player.name || "Player"}</span><span class="text-purple-700">${player.emoji || ""}</span>`;
+    playersList.appendChild(li);
   });
 }
 
@@ -110,8 +187,12 @@ let clientId = localStorage.getItem("npats_client_id") || (() => {
 })();
 let entriesUnsub = null;
 let roomUnsub = null;
+let playersUnsub = null;
 let timerIntervalId = null;
 let roundActive = false;
+let singleRoundActive = false;
+let singleRoundLetter = null;
+let singleRoundStartTime = null;
 
 function setRoomStatus(text) {
   roomStatus.textContent = text;
@@ -147,6 +228,7 @@ function startCountdown(endMillis) {
 function detachListeners() {
   if (entriesUnsub) { entriesUnsub(); entriesUnsub = null; }
   if (roomUnsub) { roomUnsub(); roomUnsub = null; }
+  if (playersUnsub) { playersUnsub(); playersUnsub = null; }
   stopTimer();
 }
 
@@ -171,6 +253,39 @@ function subscribeToRoom(roomId) {
       setTimerText("--:--");
     }
   });
+  
+  singleGameForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (!validateSingleForm()) {
+      singleFormError.classList.remove("hidden");
+      return;
+    }
+    singleFormError.classList.add("hidden");
+  
+    if (!singleRoundActive) {
+      singleFormError.textContent = "Round not active. Start a round first.";
+      singleFormError.classList.remove("hidden");
+      return;
+    }
+  
+    const entry = {
+      letter: singleRoundLetter,
+      name: singleNameInput.value.trim(),
+      place: singlePlaceInput.value.trim(),
+      animal: singleAnimalInput.value.trim(),
+      thing: singleThingInput.value.trim(),
+      artiste: singleArtisteInput.value.trim(),
+      timestamp: new Date().toLocaleString(),
+    };
+  
+    const entries = JSON.parse(localStorage.getItem("singlePlayerEntries") || "[]");
+    entries.push(entry);
+    localStorage.setItem("singlePlayerEntries", JSON.stringify(entries));
+  
+    renderSingleEntries();
+    clearSingleForm();
+    alert("Submitted successfully!");
+  });
 
   const entriesRef = collection(db, "rooms", roomId, "entries");
   const q = query(entriesRef, orderBy("createdAt", "desc"));
@@ -178,6 +293,13 @@ function subscribeToRoom(roomId) {
     renderEntries(snap.docs);
     if (entriesHint) entriesHint.textContent = `Room ${roomId}`;
     renderLeaderboard(snap.docs);
+  });
+
+  const playersRef = collection(db, "rooms", roomId, "players");
+  playersUnsub = onSnapshot(playersRef, (snap) => {
+    const players = snap.docs.map(doc => doc.data());
+    renderPlayers(players);
+    if (playersHint) playersHint.textContent = `Room ${roomId}`;
   });
 }
 
@@ -265,6 +387,21 @@ async function stopRound() {
   });
 }
 
+function startSingleRound() {
+  singleRoundLetter = getRandomLetter();
+  letterDisplay.textContent = singleRoundLetter; // Use the same display
+  singleRoundActive = true;
+  singleRoundStartTime = Date.now();
+  startCountdown(Date.now() + 60000); // 60 seconds default
+}
+
+function stopSingleRound() {
+  singleRoundActive = false;
+  stopTimer();
+  setTimerText("--:--");
+  letterDisplay.textContent = "-";
+}
+
 // --- Events ---
 createRoomBtn.addEventListener("click", (e) => {
   e.preventDefault();
@@ -284,6 +421,16 @@ startRoundBtn.addEventListener("click", (e) => {
 stopRoundBtn.addEventListener("click", (e) => {
   e.preventDefault();
   stopRound().catch((err) => console.error(err));
+});
+
+startSingleRoundBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  startSingleRound();
+});
+
+stopSingleRoundBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  stopSingleRound();
 });
 
 // Auto-generate a new random letter without starting a new round (host utility)
@@ -327,6 +474,7 @@ form.addEventListener("submit", async (e) => {
     place: placeInput.value.trim(),
     animal: animalInput.value.trim(),
     thing: thingInput.value.trim(),
+    artiste: artisteInput.value.trim(),
     playerId: clientId,
     createdAt: serverTimestamp(),
   };
@@ -467,6 +615,7 @@ if (saveProfileBtn) {
 }
 
 loadProfile();
+renderSingleEntries();
 
 // Inject Vercel Analytics
 inject();
