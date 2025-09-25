@@ -48,6 +48,7 @@ const profileEmojiInput = document.getElementById("profileEmoji");
 const saveProfileBtn = document.getElementById("saveProfileBtn");
 const profileStatus = document.getElementById("profileStatus");
 const autoLetterBtn = document.getElementById("autoLetterBtn");
+const stopRoundBtn = document.getElementById("stopRoundBtn");
 
 // --- Helpers ---
 function getRandomLetter() {
@@ -252,6 +253,18 @@ async function startRound() {
   });
 }
 
+async function stopRound() {
+  if (!currentRoomId) {
+    alert("Create or join a room first.");
+    return;
+  }
+  const roomRef = doc(db, "rooms", currentRoomId);
+  await updateDoc(roomRef, {
+    active: false,
+    roundEndsAt: Timestamp.now(),
+  });
+}
+
 // --- Events ---
 createRoomBtn.addEventListener("click", (e) => {
   e.preventDefault();
@@ -266,6 +279,11 @@ joinRoomBtn.addEventListener("click", (e) => {
 startRoundBtn.addEventListener("click", (e) => {
   e.preventDefault();
   startRound().catch((err) => console.error(err));
+});
+
+stopRoundBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  stopRound().catch((err) => console.error(err));
 });
 
 // Auto-generate a new random letter without starting a new round (host utility)
