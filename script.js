@@ -21,6 +21,18 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getFirestore(app);
 
+// --- Analytics Helper ---
+function trackEvent(eventName, properties = {}) {
+  // Firebase Analytics
+  if (analytics) {
+    analytics.logEvent(eventName, properties);
+  }
+  // Vercel Analytics
+  if (window.va) {
+    window.va('track', eventName, properties);
+  }
+}
+
 // --- DOM Elements ---
 const letterDisplay = document.getElementById("letterDisplay");
 const timerDisplay = document.getElementById("timerDisplay");
@@ -222,6 +234,9 @@ async function createRoom() {
     joinedAt: serverTimestamp(),
     score: 0,
   }, { merge: true });
+  
+  // Track room creation
+  trackEvent('room_created', { roomId, playerName });
 }
 
 async function joinRoom() {
@@ -246,6 +261,9 @@ async function joinRoom() {
     joinedAt: serverTimestamp(),
     score: 0,
   }, { merge: true });
+  
+  // Track room join
+  trackEvent('room_joined', { roomId, playerName });
 }
 
 async function startRound() {
@@ -261,6 +279,9 @@ async function startRound() {
     active: true,
     roundEndsAt: Timestamp.fromMillis(endMillis),
   });
+  
+  // Track round start
+  trackEvent('round_started', { roomId: currentRoomId, duration: durationSeconds });
 }
 
 // --- Events ---
@@ -336,6 +357,12 @@ form.addEventListener("submit", async (e) => {
     });
     alert("Submitted successfully!");
     clearForm();
+    
+    // Track submission
+    trackEvent('answer_submitted', { 
+      roomId: currentRoomId, 
+      letter: payload.letter
+    });
   } catch (err) {
     console.error("Failed to submit", err);
     alert("Failed to submit. Check console for details.");
