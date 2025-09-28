@@ -5,191 +5,202 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PADI PLAY</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+      }
+      @keyframes glow {
+        0%, 100% { box-shadow: 0 0 20px rgba(147, 51, 234, 0.3); }
+        50% { box-shadow: 0 0 30px rgba(147, 51, 234, 0.6); }
+      }
+      @keyframes shimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+      }
+      .float-animation { animation: float 3s ease-in-out infinite; }
+      .glow-animation { animation: glow 2s ease-in-out infinite; }
+      .shimmer {
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        background-size: 200% 100%;
+        animation: shimmer 2s infinite;
+      }
+      .section-hover:hover {
+        transform: translateY(-2px);
+        transition: transform 0.3s ease;
+      }
+    </style>
   </head>
-  <body class="min-h-screen bg-gradient-to-br from-purple-100 to-pink-100 text-gray-900">
-    <main class="max-w-2xl mx-auto p-6">
-      <div class="flex items-center justify-center gap-3 mb-6">
-        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-yellow-500 text-white flex items-center justify-center font-bold tracking-wide shadow-lg">PP</div>
-        <h1 class="text-2xl font-semibold text-center text-purple-800">PADI PLAY</h1>
+  <body class="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 text-gray-900 relative">
+    <!-- Animated Background Elements -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+      <!-- Floating Circles -->
+      <div class="absolute top-10 left-10 w-20 h-20 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full opacity-20 animate-pulse"></div>
+      <div class="absolute top-32 right-20 w-16 h-16 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full opacity-30 animate-bounce"></div>
+      <div class="absolute bottom-20 left-1/4 w-12 h-12 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-full opacity-25 animate-ping"></div>
+      <div class="absolute bottom-32 right-1/3 w-24 h-24 bg-gradient-to-r from-amber-400 to-orange-400 rounded-full opacity-20 animate-pulse"></div>
+      <div class="absolute top-1/2 left-5 w-8 h-8 bg-gradient-to-r from-violet-400 to-purple-400 rounded-full opacity-30 animate-bounce"></div>
+      
+      <!-- Geometric Shapes -->
+      <div class="absolute top-1/4 right-10 w-0 h-0 border-l-[15px] border-r-[15px] border-b-[26px] border-l-transparent border-r-transparent border-b-purple-300 opacity-40 animate-spin"></div>
+      <div class="absolute bottom-1/4 left-10 w-0 h-0 border-l-[20px] border-r-[20px] border-b-[35px] border-l-transparent border-r-transparent border-b-blue-300 opacity-30 animate-pulse"></div>
+      
+      <!-- Floating Dots Pattern -->
+      <div class="absolute top-20 left-1/2 w-2 h-2 bg-pink-400 rounded-full opacity-40 animate-ping"></div>
+      <div class="absolute top-40 right-1/4 w-3 h-3 bg-cyan-400 rounded-full opacity-30 animate-pulse"></div>
+      <div class="absolute bottom-40 left-1/3 w-2 h-2 bg-emerald-400 rounded-full opacity-35 animate-bounce"></div>
+      <div class="absolute bottom-20 right-1/2 w-4 h-4 bg-amber-400 rounded-full opacity-25 animate-ping"></div>
+      
+      <!-- Wave Pattern -->
+      <div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-purple-200/30 to-transparent"></div>
+      <div class="absolute top-0 right-0 w-full h-24 bg-gradient-to-b from-pink-200/20 to-transparent"></div>
+    </div>
+
+    <main class="max-w-2xl mx-auto p-3 sm:p-6 relative z-10">
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 relative">
+        <!-- Logo with enhanced styling -->
+        <div class="relative">
+          <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-indigo-600 via-purple-600 to-emerald-500 text-white flex items-center justify-center font-bold tracking-wide text-lg sm:text-xl shadow-2xl animate-pulse">
+            PP
+          </div>
+          <!-- Glow effect -->
+          <div class="absolute inset-0 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-indigo-600 via-purple-600 to-emerald-500 opacity-30 blur-lg animate-pulse"></div>
+        </div>
+        <div class="text-center">
+          <h1 class="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-1 sm:mb-2">PADI PLAY</h1>
+          <p class="text-xs sm:text-sm text-gray-600 font-medium">Multiplayer Word Game</p>
+        </div>
       </div>
 
-      <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5 mb-6 backdrop-blur-sm">
-        <h2 class="text-lg font-medium mb-3 text-purple-800">Your Profile</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+      <section class="bg-gradient-to-br from-cyan-50 to-blue-50 shadow-lg border border-cyan-200 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 section-hover relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-20 h-20 sm:w-32 sm:h-32 bg-gradient-to-br from-cyan-200/20 to-blue-200/20 rounded-full -translate-y-10 sm:-translate-y-16 translate-x-10 sm:translate-x-16"></div>
+        <h2 class="text-lg sm:text-xl font-bold text-cyan-800 mb-3 sm:mb-4 relative z-10">Your Profile</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-3 sm:mb-4">
           <div class="sm:col-span-2">
-            <label for="profileName" class="block text-sm font-medium text-purple-700">Display name</label>
-            <input id="profileName" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Alex" />
+            <label for="profileName" class="block text-sm font-semibold text-cyan-700 mb-2">Display name</label>
+            <input id="profileName" type="text" class="w-full rounded-lg border-2 border-cyan-200 px-3 sm:px-4 py-2.5 sm:py-3 text-base focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 transition-all duration-200" placeholder="e.g., Alex" />
           </div>
           <div>
-            <label for="profileEmoji" class="block text-sm font-medium text-purple-700">Emoji</label>
-            <input id="profileEmoji" type="text" maxlength="2" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 text-center text-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="😀" />
+            <label for="profileEmoji" class="block text-sm font-semibold text-cyan-700 mb-2">Emoji</label>
+            <input id="profileEmoji" type="text" maxlength="2" class="w-full rounded-lg border-2 border-cyan-200 px-3 sm:px-4 py-2.5 sm:py-3 text-center text-xl sm:text-2xl focus:border-cyan-500 focus:ring-2 focus:ring-cyan-200 transition-all duration-200" placeholder="😀" />
           </div>
         </div>
-        <div class="mt-3 flex items-center gap-2">
-          <button id="saveProfileBtn" class="rounded-md bg-blue-600 px-3 py-2 text-white hover:bg-blue-700 shadow-sm">Save Profile</button>
-          <span id="profileStatus" class="text-sm text-purple-600"></span>
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+          <button id="saveProfileBtn" class="w-full sm:w-auto rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 px-4 py-2.5 sm:py-2 text-white font-semibold hover:from-cyan-700 hover:to-blue-700 active:scale-[0.98] transition-all duration-200 shadow-md text-sm sm:text-base">Save Profile</button>
+          <span id="profileStatus" class="text-xs sm:text-sm text-cyan-600 font-medium"></span>
         </div>
       </section>
 
-      <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5 mb-6 backdrop-blur-sm">
-        <h2 class="text-lg font-medium mb-3 text-purple-800">Multiplayer Room</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+      <section class="bg-gradient-to-br from-slate-50 to-gray-50 shadow-lg border border-slate-200 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 section-hover relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-slate-200/30 to-gray-200/30 rounded-full -translate-y-8 sm:-translate-y-12 -translate-x-8 sm:-translate-x-12"></div>
+        <div class="absolute bottom-0 right-0 w-12 h-12 sm:w-20 sm:h-20 bg-gradient-to-br from-slate-300/20 to-gray-300/20 rounded-full translate-y-6 sm:translate-y-10 translate-x-6 sm:translate-x-10"></div>
+        <h2 class="text-lg sm:text-xl font-bold text-slate-800 mb-3 sm:mb-4 relative z-10">Multiplayer Room</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-3 sm:mb-4">
           <div>
-            <label for="playerName" class="block text-sm font-medium text-purple-700">Your name</label>
-            <input id="playerName" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Alex">
+            <label for="roomCode" class="block text-sm font-semibold text-slate-700 mb-2">Room code</label>
+            <input id="roomCode" type="text" class="w-full rounded-lg border-2 border-slate-200 px-3 sm:px-4 py-2.5 sm:py-3 text-base uppercase tracking-wider focus:border-slate-500 focus:ring-2 focus:ring-slate-200 transition-all duration-200" placeholder="e.g., AB12">
           </div>
-          <div>
-            <label for="roomCode" class="block text-sm font-medium text-purple-700">Room code</label>
-            <input id="roomCode" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 uppercase tracking-wider focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., AB12">
-          </div>
-        </div>
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div class="flex flex-wrap gap-2">
-            <button id="createRoomBtn" class="rounded-md bg-purple-600 px-3 py-2 text-white hover:bg-purple-700 shadow-sm">Create Room</button>
-            <button id="joinRoomBtn" class="rounded-md bg-pink-600 px-3 py-2 text-white hover:bg-pink-700 shadow-sm">Join Room</button>
-          </div>
-          <div class="flex items-center gap-2">
-            <label for="roundDuration" class="text-sm text-purple-700">Duration</label>
-            <select id="roundDuration" class="rounded-md border border-purple-300 px-2 py-1 text-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-200">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+            <label for="roundDuration" class="text-sm font-semibold text-slate-700 whitespace-nowrap">Round Duration</label>
+            <select id="roundDuration" class="w-full rounded-lg border-2 border-slate-200 px-3 py-2.5 sm:py-3 text-base focus:border-slate-500 focus:ring-2 focus:ring-slate-200 transition-all duration-200">
               <option value="30">30s</option>
               <option value="45">45s</option>
               <option value="60" selected>60s</option>
             </select>
           </div>
-          <span id="roomStatus" class="text-sm text-purple-600">Not in a room</span>
+        </div>
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
+          <button id="createRoomBtn" class="flex-1 sm:flex-none rounded-lg bg-gradient-to-r from-slate-700 to-gray-700 px-4 py-2.5 sm:py-2 text-white font-semibold hover:from-slate-800 hover:to-gray-800 active:scale-[0.98] transition-all duration-200 shadow-md text-sm sm:text-base">Create Room</button>
+          <button id="joinRoomBtn" class="flex-1 sm:flex-none rounded-lg bg-gradient-to-r from-slate-500 to-gray-500 px-4 py-2.5 sm:py-2 text-white font-semibold hover:from-slate-600 hover:to-gray-600 active:scale-[0.98] transition-all duration-200 shadow-md text-sm sm:text-base">Join Room</button>
+          <span id="roomStatus" class="text-xs sm:text-sm text-slate-600 font-medium text-center sm:text-left sm:ml-auto">Not in a room</span>
         </div>
       </section>
 
-      <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5 mb-6 backdrop-blur-sm">
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <section class="bg-gradient-to-br from-violet-50 to-purple-50 shadow-lg border border-violet-200 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 section-hover relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-24 h-24 sm:w-40 sm:h-40 bg-gradient-to-br from-violet-200/20 to-purple-200/20 rounded-full -translate-y-12 sm:-translate-y-20 translate-x-12 sm:translate-x-20 float-animation"></div>
+        <div class="absolute bottom-0 left-0 w-20 h-20 sm:w-32 sm:h-32 bg-gradient-to-br from-purple-200/15 to-pink-200/15 rounded-full translate-y-10 sm:translate-y-16 -translate-x-10 sm:-translate-x-16"></div>
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-4 relative z-10">
           <div class="text-center sm:text-left">
-            <p class="text-sm text-purple-600">Selected letter</p>
-            <p id="letterDisplay" class="text-4xl font-bold tracking-widest text-orange-600">-</p>
+            <p class="text-sm font-semibold text-violet-700 mb-2">Selected letter</p>
+            <p id="letterDisplay" class="text-4xl sm:text-6xl font-bold tracking-widest text-violet-800 glow-animation">-</p>
           </div>
-          <div class="flex flex-col items-center gap-3 sm:flex-row sm:items-center">
+          <div class="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
             <div class="text-center sm:text-right">
-              <p class="text-sm text-purple-600">Time left</p>
-              <p id="timerDisplay" class="text-2xl font-semibold text-purple-800">--:--</p>
+              <p class="text-sm font-semibold text-violet-700 mb-1">Time left</p>
+              <p id="timerDisplay" class="text-2xl sm:text-3xl font-bold text-violet-800">--:--</p>
             </div>
-            <div class="flex flex-col gap-2 sm:flex-row">
-              <button id="autoLetterBtn" class="inline-flex items-center justify-center gap-2 rounded-md bg-yellow-500 px-3 py-2 text-sm text-white hover:bg-yellow-600 active:scale-[0.99] shadow-sm sm:px-4">
+            <div class="flex flex-col sm:flex-col gap-2 w-full sm:w-auto">
+              <button id="autoLetterBtn" class="w-full sm:w-auto rounded-lg bg-gradient-to-r from-purple-600 to-violet-600 px-3 sm:px-4 py-2 text-white font-semibold hover:from-purple-700 hover:to-violet-700 active:scale-[0.98] transition-all duration-200 shadow-md text-sm sm:text-base">
                 Auto Generate Letter
               </button>
-              <button id="startRoundBtn" class="inline-flex items-center justify-center gap-2 rounded-md bg-green-600 px-3 py-2 text-sm text-white hover:bg-green-700 active:scale-[0.99] shadow-sm sm:px-4">
+              <button id="startRoundBtn" class="w-full sm:w-auto rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-3 sm:px-4 py-2 text-white font-semibold hover:from-indigo-700 hover:to-blue-700 active:scale-[0.98] transition-all duration-200 shadow-md text-sm sm:text-base">
                 Start Round
-              </button>
-              <button id="stopRoundBtn" class="inline-flex items-center justify-center gap-2 rounded-md bg-red-600 px-3 py-2 text-sm text-white hover:bg-red-700 active:scale-[0.99] shadow-sm sm:px-4">
-                Stop Round
               </button>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5 mb-6 backdrop-blur-sm">
-        <h2 class="text-lg font-medium mb-3 text-purple-800">Single Player</h2>
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-3">
-          <div class="flex flex-wrap gap-2">
-            <button id="startSingleRoundBtn" class="rounded-md bg-green-600 px-3 py-2 text-white hover:bg-green-700 shadow-sm">Start Round</button>
-            <button id="stopSingleRoundBtn" class="rounded-md bg-red-600 px-3 py-2 text-white hover:bg-red-700 shadow-sm">Stop Round</button>
-          </div>
-        </div>
-        <form id="singleGameForm" class="grid grid-cols-1 gap-4">
-          <div>
-            <label for="singleNameInput" class="block text-sm font-medium text-purple-700">Name</label>
-            <input id="singleNameInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Alice" required>
-          </div>
-          <div>
-            <label for="singlePlaceInput" class="block text-sm font-medium text-purple-700">Place</label>
-            <input id="singlePlaceInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Alaska" required>
-          </div>
-          <div>
-            <label for="singleAnimalInput" class="block text-sm font-medium text-purple-700">Animal</label>
-            <input id="singleAnimalInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Antelope" required>
-          </div>
-          <div>
-            <label for="singleThingInput" class="block text-sm font-medium text-purple-700">Thing</label>
-            <input id="singleThingInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Anchor" required>
+      <section class="bg-gradient-to-br from-purple-50 to-pink-50 shadow-lg border border-purple-200 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 section-hover relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-24 h-24 sm:w-36 sm:h-36 bg-gradient-to-br from-purple-200/25 to-pink-200/25 rounded-full -translate-y-12 sm:-translate-y-18 -translate-x-12 sm:-translate-x-18 float-animation"></div>
+        <div class="absolute bottom-0 right-0 w-20 h-20 sm:w-28 sm:h-28 bg-gradient-to-br from-pink-200/20 to-rose-200/20 rounded-full translate-y-10 sm:translate-y-14 translate-x-10 sm:translate-x-14"></div>
+        <form id="gameForm" class="grid grid-cols-1 gap-3 sm:gap-4 relative z-10">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <div>
+              <label for="nameInput" class="block text-sm font-semibold text-purple-800 mb-2">Name</label>
+              <input id="nameInput" type="text" class="w-full rounded-lg border-2 border-purple-200 px-3 sm:px-4 py-2.5 sm:py-3 text-base focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200" placeholder="e.g., Alice" required>
+            </div>
+            <div>
+              <label for="placeInput" class="block text-sm font-semibold text-purple-800 mb-2">Place</label>
+              <input id="placeInput" type="text" class="w-full rounded-lg border-2 border-purple-200 px-3 sm:px-4 py-2.5 sm:py-3 text-base focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200" placeholder="e.g., Alaska" required>
+            </div>
+            <div>
+              <label for="animalInput" class="block text-sm font-semibold text-purple-800 mb-2">Animal</label>
+              <input id="animalInput" type="text" class="w-full rounded-lg border-2 border-purple-200 px-3 sm:px-4 py-2.5 sm:py-3 text-base focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200" placeholder="e.g., Antelope" required>
+            </div>
+            <div>
+              <label for="thingInput" class="block text-sm font-semibold text-purple-800 mb-2">Thing</label>
+              <input id="thingInput" type="text" class="w-full rounded-lg border-2 border-purple-200 px-3 sm:px-4 py-2.5 sm:py-3 text-base focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200" placeholder="e.g., Anchor" required>
+            </div>
           </div>
           <div>
-            <label for="singleArtisteInput" class="block text-sm font-medium text-purple-700">Artiste</label>
-            <input id="singleArtisteInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Adele" required>
+            <label for="artistInput" class="block text-sm font-semibold text-purple-800 mb-2">Artist (Singer/Musician)</label>
+            <input id="artistInput" type="text" class="w-full rounded-lg border-2 border-purple-200 px-3 sm:px-4 py-2.5 sm:py-3 text-base focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200" placeholder="e.g., Adele" required />
           </div>
-          <button id="singleSubmitBtn" type="submit" class="mt-2 rounded-md bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700 active:scale-[0.99] shadow-sm">Submit</button>
-          <p id="singleFormError" class="text-sm text-red-600 hidden">Please generate a letter and fill all fields.</p>
+          <button id="submitBtn" type="submit" class="mt-3 sm:mt-4 w-full rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-4 sm:px-6 py-3 text-white font-semibold hover:from-purple-700 hover:to-pink-700 active:scale-[0.98] transition-all duration-200 shadow-lg text-sm sm:text-base">Submit Answer</button>
+          <p id="formError" class="text-sm text-red-600 hidden mt-2">Please generate a letter and fill all fields.</p>
         </form>
       </section>
 
-      <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5 mb-6 backdrop-blur-sm">
-        <form id="gameForm" class="grid grid-cols-1 gap-4">
-          <div>
-            <label for="nameInput" class="block text-sm font-medium text-purple-700">Name</label>
-            <input id="nameInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Alice" required>
-          </div>
-          <div>
-            <label for="placeInput" class="block text-sm font-medium text-purple-700">Place</label>
-            <input id="placeInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Alaska" required>
-          </div>
-          <div>
-            <label for="animalInput" class="block text-sm font-medium text-purple-700">Animal</label>
-            <input id="animalInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Antelope" required>
-          </div>
-          <div>
-            <label for="thingInput" class="block text-sm font-medium text-purple-700">Thing</label>
-            <input id="thingInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Anchor" required>
-          </div>
-          <div>
-            <label for="artisteInput" class="block text-sm font-medium text-purple-700">Artiste</label>
-            <input id="artisteInput" type="text" class="mt-1 w-full rounded-md border border-purple-300 px-3 py-2 focus:border-orange-500 focus:ring-2 focus:ring-orange-200" placeholder="e.g., Adele" required>
-          </div>
-          <button id="submitBtn" type="submit" class="mt-2 rounded-md bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700 active:scale-[0.99] shadow-sm">Submit</button>
-          <p id="formError" class="text-sm text-red-600 hidden">Please generate a letter and fill all fields.</p>
-        </form>
-      </section>
-
-      <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5">
-        <div class="flex items-center justify-between mb-3">
-          <h2 class="text-lg font-medium text-purple-800">Room Entries</h2>
-          <span id="entriesHint" class="text-xs text-purple-600">Join a room to see live entries</span>
+      <section class="bg-gradient-to-br from-blue-50 to-indigo-50 shadow-lg border border-blue-200 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 section-hover relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-20 h-20 sm:w-30 sm:h-30 bg-gradient-to-br from-blue-200/20 to-indigo-200/20 rounded-full -translate-y-10 sm:-translate-y-15 translate-x-10 sm:translate-x-15"></div>
+        <div class="absolute bottom-0 left-0 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-indigo-200/25 to-blue-200/25 rounded-full translate-y-8 sm:translate-y-12 -translate-x-8 sm:-translate-x-12 float-animation"></div>
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-4 relative z-10 gap-2">
+          <h2 class="text-lg sm:text-xl font-bold text-blue-800">Room Members</h2>
+          <span id="membersCount" class="text-xs sm:text-sm text-blue-600 font-medium">0 players</span>
         </div>
-        <ul id="entriesList" class="divide-y divide-purple-200"></ul>
+        <div id="roomMembersList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3"></div>
       </section>
 
-      <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5 mt-6 backdrop-blur-sm">
-        <div class="flex items-center justify-between mb-3">
-          <h2 class="text-lg font-medium text-purple-800">Players in Room</h2>
-          <span id="playersHint" class="text-xs text-purple-600">Join a room to see players</span>
+      <section class="bg-gradient-to-br from-emerald-50 to-teal-50 shadow-lg border border-emerald-200 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 section-hover relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-20 h-20 sm:w-32 sm:h-32 bg-gradient-to-br from-emerald-200/20 to-teal-200/20 rounded-full -translate-y-10 sm:-translate-y-16 -translate-x-10 sm:-translate-x-16"></div>
+        <div class="absolute bottom-0 right-0 w-16 h-16 sm:w-28 sm:h-28 bg-gradient-to-br from-teal-200/25 to-emerald-200/25 rounded-full translate-y-8 sm:translate-y-14 translate-x-8 sm:translate-x-14 float-animation"></div>
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-4 relative z-10 gap-2">
+          <h2 class="text-lg sm:text-xl font-bold text-emerald-800">Room Entries</h2>
+          <span id="entriesHint" class="text-xs sm:text-sm text-emerald-600">Join a room to see live entries</span>
         </div>
-        <ul id="playersList" class="divide-y divide-purple-200"></ul>
+        <ul id="entriesList" class="space-y-2 sm:space-y-3"></ul>
       </section>
 
-      <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5 mt-6 backdrop-blur-sm">
-        <div class="flex items-center justify-between mb-3">
-          <h2 class="text-lg font-medium text-purple-800">Leaderboard</h2>
-          <span class="text-xs text-purple-600">Scores update live</span>
+      <section class="bg-gradient-to-br from-amber-50 to-orange-50 shadow-lg border border-amber-200 rounded-xl p-4 sm:p-6 section-hover relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-24 h-24 sm:w-36 sm:h-36 bg-gradient-to-br from-amber-200/20 to-orange-200/20 rounded-full -translate-y-12 sm:-translate-y-18 translate-x-12 sm:translate-x-18"></div>
+        <div class="absolute bottom-0 left-0 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-orange-200/25 to-amber-200/25 rounded-full translate-y-8 sm:translate-y-12 -translate-x-8 sm:-translate-x-12 float-animation"></div>
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-4 relative z-10 gap-2">
+          <h2 class="text-lg sm:text-xl font-bold text-amber-800">Leaderboard</h2>
+          <span class="text-xs sm:text-sm text-amber-600 font-medium">Scores update live</span>
         </div>
-        <ul id="leaderboardList" class="divide-y divide-purple-200"></ul>
+        <ul id="leaderboardList" class="space-y-2 sm:space-y-3"></ul>
       </section>
-
-      <section class="bg-white/90 shadow-md border border-purple-200 rounded-lg p-5 mt-6 backdrop-blur-sm">
-        <div class="flex items-center justify-between mb-3">
-          <h2 class="text-lg font-medium text-purple-800">Single Player Entries</h2>
-          <span class="text-xs text-purple-600">Local entries</span>
-        </div>
-        <ul id="singleEntriesList" class="divide-y divide-purple-200"></ul>
-      </section>
-
-      <footer class="bg-gradient-to-r from-purple-50 to-pink-50 border-t border-purple-200 mt-8 p-5 rounded-lg shadow-md">
-        <h2 class="text-lg font-medium mb-3 text-purple-800">Game Rules</h2>
-        <ol class="list-decimal list-inside space-y-1 text-sm text-purple-700">
-          <li>A random letter is selected for each round.</li>
-          <li>Players must enter a Name, Place, Animal, Thing, and Artiste that start with the selected letter.</li>
-          <li>You have a limited time (30-60 seconds) to submit your answers.</li>
-          <li>Points are awarded based on how quickly you submit (faster = more points).</li>
-          <li>Only one submission per player per round is allowed.</li>
-          <li>Join a room to play with others and see live updates.</li>
-        </ol>
-      </footer>
     </main>
 
     <script type="module" src="./script.js"></script>

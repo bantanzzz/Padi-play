@@ -3,10 +3,7 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
-import { getFirestore, collection, addDoc, serverTimestamp, getDocs, query, orderBy, doc, setDoc, getDoc, updateDoc, onSnapshot, Timestamp, increment } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
-
-// Vercel Analytics
-import { inject } from 'https://esm.sh/@vercel/analytics';
+import { getFirestore, collection, addDoc, serverTimestamp, getDocs, query, orderBy, doc, setDoc, getDoc, updateDoc, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 // --- Firebase Setup (placeholder: replace with your config) ---
 const firebaseConfig = {
@@ -28,7 +25,7 @@ const db = getFirestore(app);
 const letterDisplay = document.getElementById("letterDisplay");
 const timerDisplay = document.getElementById("timerDisplay");
 const startRoundBtn = document.getElementById("startRoundBtn");
-const playerNameInput = document.getElementById("playerName");
+// Removed playerNameInput - now using profile only
 const roomCodeInput = document.getElementById("roomCode");
 const createRoomBtn = document.getElementById("createRoomBtn");
 const joinRoomBtn = document.getElementById("joinRoomBtn");
@@ -39,30 +36,18 @@ const nameInput = document.getElementById("nameInput");
 const placeInput = document.getElementById("placeInput");
 const animalInput = document.getElementById("animalInput");
 const thingInput = document.getElementById("thingInput");
-const artisteInput = document.getElementById("artisteInput");
+const artistInput = document.getElementById("artistInput");
 const formError = document.getElementById("formError");
 const entriesList = document.getElementById("entriesList");
 const leaderboardList = document.getElementById("leaderboardList");
-const playersList = document.getElementById("playersList");
-const playersHint = document.getElementById("playersHint");
+const roomMembersList = document.getElementById("roomMembersList");
+const membersCount = document.getElementById("membersCount");
 const roundDurationSelect = document.getElementById("roundDuration");
 const profileNameInput = document.getElementById("profileName");
 const profileEmojiInput = document.getElementById("profileEmoji");
 const saveProfileBtn = document.getElementById("saveProfileBtn");
 const profileStatus = document.getElementById("profileStatus");
 const autoLetterBtn = document.getElementById("autoLetterBtn");
-const stopRoundBtn = document.getElementById("stopRoundBtn");
-const startSingleRoundBtn = document.getElementById("startSingleRoundBtn");
-const stopSingleRoundBtn = document.getElementById("stopSingleRoundBtn");
-const singleGameForm = document.getElementById("singleGameForm");
-const singleNameInput = document.getElementById("singleNameInput");
-const singlePlaceInput = document.getElementById("singlePlaceInput");
-const singleAnimalInput = document.getElementById("singleAnimalInput");
-const singleThingInput = document.getElementById("singleThingInput");
-const singleArtisteInput = document.getElementById("singleArtisteInput");
-const singleSubmitBtn = document.getElementById("singleSubmitBtn");
-const singleFormError = document.getElementById("singleFormError");
-const singleEntriesList = document.getElementById("singleEntriesList");
 
 // --- Helpers ---
 function getRandomLetter() {
@@ -76,55 +61,12 @@ function clearForm() {
   placeInput.value = "";
   animalInput.value = "";
   thingInput.value = "";
-  artisteInput.value = "";
-}
-
-function clearSingleForm() {
-  singleNameInput.value = "";
-  singlePlaceInput.value = "";
-  singleAnimalInput.value = "";
-  singleThingInput.value = "";
-  singleArtisteInput.value = "";
-}
-
-function validateSingleForm() {
-  const hasLetter = singleRoundLetter && singleRoundLetter !== "-";
-  const allFilled = singleNameInput.value.trim() && singlePlaceInput.value.trim() && singleAnimalInput.value.trim() && singleThingInput.value.trim() && singleArtisteInput.value.trim();
-  return Boolean(hasLetter && allFilled);
-}
-
-function renderSingleEntries() {
-  const entries = JSON.parse(localStorage.getItem("singlePlayerEntries") || "[]");
-  singleEntriesList.innerHTML = "";
-  if (!entries.length) {
-    const li = document.createElement("li");
-    li.className = "py-4 text-sm text-gray-500";
-    li.textContent = "No entries yet.";
-    singleEntriesList.appendChild(li);
-    return;
-  }
-
-  entries.forEach((entry) => {
-    const li = document.createElement("li");
-    li.className = "py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1";
-    li.innerHTML = `
-      <div>
-        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-orange-100 text-orange-700 text-xs font-semibold mr-2">${entry.letter || "-"}</span>
-        <span class="font-medium">Name:</span> ${entry.name}
-        <span class="ml-3 font-medium">Place:</span> ${entry.place}
-        <span class="ml-3 font-medium">Animal:</span> ${entry.animal}
-        <span class="ml-3 font-medium">Thing:</span> ${entry.thing}
-        <span class="ml-3 font-medium">Artiste:</span> ${entry.artiste}
-      </div>
-      <div class="text-xs text-purple-500">${entry.timestamp}</div>
-    `;
-    singleEntriesList.appendChild(li);
-  });
+  artistInput.value = "";
 }
 
 function validateForm() {
   const hasLetter = letterDisplay.textContent && letterDisplay.textContent !== "-";
-  const allFilled = nameInput.value.trim() && placeInput.value.trim() && animalInput.value.trim() && thingInput.value.trim() && artisteInput.value.trim();
+  const allFilled = nameInput.value.trim() && placeInput.value.trim() && animalInput.value.trim() && thingInput.value.trim() && artistInput.value.trim();
   return Boolean(hasLetter && allFilled);
 }
 
@@ -146,35 +88,23 @@ function renderEntries(items) {
     const li = document.createElement("li");
     li.className = "py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1";
     li.innerHTML = `
-      <div>
-        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-orange-100 text-orange-700 text-xs font-semibold mr-2">${data.letter || "-"}</span>
-        <span class="font-medium">Name:</span> ${data.name}
-        <span class="ml-3 font-medium">Place:</span> ${data.place}
-        <span class="ml-3 font-medium">Animal:</span> ${data.animal}
-        <span class="ml-3 font-medium">Thing:</span> ${data.thing}
-        <span class="ml-3 font-medium">Artiste:</span> ${data.artiste}
+      <div class="bg-white rounded-lg p-4 shadow-sm border border-emerald-200">
+        <div class="flex items-center gap-3 mb-2">
+          <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 text-sm font-bold">${data.letter || "-"}</span>
+          <div class="flex-1">
+            <div class="grid grid-cols-2 gap-2 text-sm">
+              <div><span class="font-semibold text-emerald-700">Name:</span> ${data.name}</div>
+              <div><span class="font-semibold text-emerald-700">Place:</span> ${data.place}</div>
+              <div><span class="font-semibold text-emerald-700">Animal:</span> ${data.animal}</div>
+              <div><span class="font-semibold text-emerald-700">Thing:</span> ${data.thing}</div>
+              <div class="col-span-2"><span class="font-semibold text-emerald-700">Artist:</span> ${data.artist || 'N/A'}</div>
+            </div>
+          </div>
+        </div>
+        <div class="text-xs text-emerald-600 font-medium">${when}</div>
       </div>
-      <div class="text-xs text-purple-500">${when}</div>
     `;
     entriesList.appendChild(li);
-  });
-}
-
-function renderPlayers(players) {
-  playersList.innerHTML = "";
-  if (!players.length) {
-    const li = document.createElement("li");
-    li.className = "py-4 text-sm text-gray-500";
-    li.textContent = "No players yet.";
-    playersList.appendChild(li);
-    return;
-  }
-
-  players.forEach((player) => {
-    const li = document.createElement("li");
-    li.className = "py-3 flex items-center justify-between";
-    li.innerHTML = `<span class="font-medium">${player.name || "Player"}</span><span class="text-purple-700">${player.emoji || ""}</span>`;
-    playersList.appendChild(li);
   });
 }
 
@@ -187,12 +117,8 @@ let clientId = localStorage.getItem("npats_client_id") || (() => {
 })();
 let entriesUnsub = null;
 let roomUnsub = null;
-let playersUnsub = null;
 let timerIntervalId = null;
 let roundActive = false;
-let singleRoundActive = false;
-let singleRoundLetter = null;
-let singleRoundStartTime = null;
 
 function setRoomStatus(text) {
   roomStatus.textContent = text;
@@ -228,7 +154,6 @@ function startCountdown(endMillis) {
 function detachListeners() {
   if (entriesUnsub) { entriesUnsub(); entriesUnsub = null; }
   if (roomUnsub) { roomUnsub(); roomUnsub = null; }
-  if (playersUnsub) { playersUnsub(); playersUnsub = null; }
   stopTimer();
 }
 
@@ -253,39 +178,6 @@ function subscribeToRoom(roomId) {
       setTimerText("--:--");
     }
   });
-  
-  singleGameForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    if (!validateSingleForm()) {
-      singleFormError.classList.remove("hidden");
-      return;
-    }
-    singleFormError.classList.add("hidden");
-  
-    if (!singleRoundActive) {
-      singleFormError.textContent = "Round not active. Start a round first.";
-      singleFormError.classList.remove("hidden");
-      return;
-    }
-  
-    const entry = {
-      letter: singleRoundLetter,
-      name: singleNameInput.value.trim(),
-      place: singlePlaceInput.value.trim(),
-      animal: singleAnimalInput.value.trim(),
-      thing: singleThingInput.value.trim(),
-      artiste: singleArtisteInput.value.trim(),
-      timestamp: new Date().toLocaleString(),
-    };
-  
-    const entries = JSON.parse(localStorage.getItem("singlePlayerEntries") || "[]");
-    entries.push(entry);
-    localStorage.setItem("singlePlayerEntries", JSON.stringify(entries));
-  
-    renderSingleEntries();
-    clearSingleForm();
-    alert("Submitted successfully!");
-  });
 
   const entriesRef = collection(db, "rooms", roomId, "entries");
   const q = query(entriesRef, orderBy("createdAt", "desc"));
@@ -295,11 +187,11 @@ function subscribeToRoom(roomId) {
     renderLeaderboard(snap.docs);
   });
 
+  // Listen to room members
   const playersRef = collection(db, "rooms", roomId, "players");
-  playersUnsub = onSnapshot(playersRef, (snap) => {
-    const players = snap.docs.map(doc => doc.data());
-    renderPlayers(players);
-    if (playersHint) playersHint.textContent = `Room ${roomId}`;
+  const playersQuery = query(playersRef, orderBy("joinedAt", "asc"));
+  const playersUnsub = onSnapshot(playersQuery, (snap) => {
+    renderRoomMembers(snap.docs);
   });
 }
 
@@ -311,8 +203,7 @@ function generateRoomCode() {
 }
 
 async function createRoom() {
-  const baseName = (profileNameInput?.value || playerNameInput.value || "Player").trim();
-  const playerName = baseName || "Player";
+  const playerName = (profileNameInput?.value || "Player").trim();
   const roomId = (roomCodeInput.value || generateRoomCode()).toUpperCase();
   const roomRef = doc(db, "rooms", roomId);
   await setDoc(roomRef, {
@@ -334,8 +225,7 @@ async function createRoom() {
 }
 
 async function joinRoom() {
-  const baseName = (profileNameInput?.value || playerNameInput.value || "Player").trim();
-  const playerName = baseName || "Player";
+  const playerName = (profileNameInput?.value || "Player").trim();
   const roomId = (roomCodeInput.value || "").toUpperCase();
   if (!roomId) {
     alert("Enter a room code to join.");
@@ -370,36 +260,7 @@ async function startRound() {
     currentLetter: getRandomLetter(),
     active: true,
     roundEndsAt: Timestamp.fromMillis(endMillis),
-    roundStartsAt: Timestamp.fromMillis(Date.now()),
-    roundDurationSeconds: durationSeconds,
   });
-}
-
-async function stopRound() {
-  if (!currentRoomId) {
-    alert("Create or join a room first.");
-    return;
-  }
-  const roomRef = doc(db, "rooms", currentRoomId);
-  await updateDoc(roomRef, {
-    active: false,
-    roundEndsAt: Timestamp.now(),
-  });
-}
-
-function startSingleRound() {
-  singleRoundLetter = getRandomLetter();
-  letterDisplay.textContent = singleRoundLetter; // Use the same display
-  singleRoundActive = true;
-  singleRoundStartTime = Date.now();
-  startCountdown(Date.now() + 60000); // 60 seconds default
-}
-
-function stopSingleRound() {
-  singleRoundActive = false;
-  stopTimer();
-  setTimerText("--:--");
-  letterDisplay.textContent = "-";
 }
 
 // --- Events ---
@@ -416,21 +277,6 @@ joinRoomBtn.addEventListener("click", (e) => {
 startRoundBtn.addEventListener("click", (e) => {
   e.preventDefault();
   startRound().catch((err) => console.error(err));
-});
-
-stopRoundBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  stopRound().catch((err) => console.error(err));
-});
-
-startSingleRoundBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  startSingleRound();
-});
-
-stopSingleRoundBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  stopSingleRound();
 });
 
 // Auto-generate a new random letter without starting a new round (host utility)
@@ -474,38 +320,20 @@ form.addEventListener("submit", async (e) => {
     place: placeInput.value.trim(),
     animal: animalInput.value.trim(),
     thing: thingInput.value.trim(),
-    artiste: artisteInput.value.trim(),
+    artist: artistInput.value.trim(),
     playerId: clientId,
     createdAt: serverTimestamp(),
   };
 
   try {
-    // Compute time-based points from room round timing
-    const roomSnap = await getDoc(doc(db, "rooms", currentRoomId));
-    const roomData = roomSnap.data() || {};
-    const endMs = roomData.roundEndsAt instanceof Timestamp ? roomData.roundEndsAt.toMillis() : Date.now();
-    const duration = Number(roomData.roundDurationSeconds || 60);
-    const remainingSec = Math.max(0, Math.ceil((endMs - Date.now()) / 1000));
-    const points = Math.max(1, Math.min(duration, remainingSec));
-    payload.points = points;
-
-    // Add roundId for uniqueness
-    const roundId = roomData.roundStartsAt ? roomData.roundStartsAt.toMillis().toString() : null;
-    if (!roundId) {
-      formError.textContent = "Round not properly started.";
-      formError.classList.remove("hidden");
-      return;
-    }
-    payload.roundId = roundId;
-
-    // Use setDoc with unique ID to prevent duplicates
-    const entryId = `${payload.playerId}_${payload.roundId}`;
-    await setDoc(doc(db, "rooms", currentRoomId, "entries", entryId), payload);
-    // Atomic score increment by points
-    await updateDoc(doc(db, "rooms", currentRoomId, "players", clientId), { score: increment(points) })
-      .catch(async () => {
-        await setDoc(doc(db, "rooms", currentRoomId, "players", clientId), { score: points }, { merge: true });
-      });
+    await addDoc(collection(db, "rooms", currentRoomId, "entries"), payload);
+    // Simple scoring: +1 per valid submission
+    await updateDoc(doc(db, "rooms", currentRoomId, "players", clientId), {
+      score: (await getDoc(doc(db, "rooms", currentRoomId, "players", clientId))).data()?.score + 1 || 1,
+    }).catch(async () => {
+      // Fallback if doc missing
+      await setDoc(doc(db, "rooms", currentRoomId, "players", clientId), { score: 1 }, { merge: true });
+    });
     alert("Submitted successfully!");
     clearForm();
   } catch (err) {
@@ -542,11 +370,52 @@ function renderLeaderboard(entryDocs) {
     leaderboardList.appendChild(li);
     return;
   }
-  arr.forEach(({ name, score }) => {
+  arr.forEach(({ name, score }, index) => {
     const li = document.createElement("li");
-    li.className = "py-3 flex items-center justify-between";
-    li.innerHTML = `<span class="font-medium">${name}</span><span class="text-purple-700 font-semibold">${score}</span>`;
+    const medal = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "";
+    li.className = "bg-white rounded-lg p-4 shadow-sm border border-amber-200";
+    li.innerHTML = `
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="text-2xl">${medal}</span>
+          <span class="font-semibold text-amber-800">${name}</span>
+        </div>
+        <span class="text-amber-700 font-bold text-lg">${score}</span>
+      </div>
+    `;
     leaderboardList.appendChild(li);
+  });
+}
+
+// --- Room Members ---
+function renderRoomMembers(memberDocs) {
+  if (!roomMembersList || !membersCount) return;
+  
+  roomMembersList.innerHTML = "";
+  membersCount.textContent = `${memberDocs.length} player${memberDocs.length !== 1 ? 's' : ''}`;
+  
+  if (!memberDocs.length) {
+    const div = document.createElement("div");
+    div.className = "col-span-full text-center py-8 text-blue-500";
+    div.textContent = "No players in room yet";
+    roomMembersList.appendChild(div);
+    return;
+  }
+
+  memberDocs.forEach((doc) => {
+    const data = doc.data();
+    const memberDiv = document.createElement("div");
+    memberDiv.className = "bg-white rounded-lg p-4 shadow-sm border border-blue-200 hover:shadow-md transition-shadow duration-200";
+    memberDiv.innerHTML = `
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">${data.emoji || "👤"}</span>
+        <div>
+          <div class="font-semibold text-blue-800">${data.name || "Player"}</div>
+          <div class="text-sm text-blue-600">Score: ${data.score || 0}</div>
+        </div>
+      </div>
+    `;
+    roomMembersList.appendChild(memberDiv);
   });
 }
 
@@ -559,7 +428,6 @@ async function loadProfile() {
       const p = JSON.parse(cached);
       if (profileNameInput && p.name) profileNameInput.value = p.name;
       if (profileEmojiInput && p.emoji) profileEmojiInput.value = p.emoji;
-      if (playerNameInput && p.name) playerNameInput.value = p.name;
     }
 
     // 2) Refresh from Firestore (authoritative)
@@ -569,7 +437,6 @@ async function loadProfile() {
       const data = snap.data();
       if (profileNameInput && data.name) profileNameInput.value = data.name;
       if (profileEmojiInput && data.emoji) profileEmojiInput.value = data.emoji;
-      if (playerNameInput && data.name) playerNameInput.value = data.name;
       // Update local cache
       localStorage.setItem("npats_profile", JSON.stringify({ name: data.name || "", emoji: data.emoji || "" }));
     }
@@ -589,7 +456,6 @@ async function saveProfile() {
     }, { merge: true });
     // Save locally for instant load next visit
     localStorage.setItem("npats_profile", JSON.stringify({ name, emoji }));
-    if (playerNameInput && name) playerNameInput.value = name;
     if (profileStatus) {
       profileStatus.textContent = "Saved!";
       setTimeout(() => (profileStatus.textContent = ""), 1500);
@@ -615,9 +481,5 @@ if (saveProfileBtn) {
 }
 
 loadProfile();
-renderSingleEntries();
-
-// Inject Vercel Analytics
-inject();
 
 
